@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import Tasks from "./components/Tasks";
+import Header from "./components/Header";
+import React, { useState } from "react";
+import AddTask from "./components/AddTask";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+const App = () => {
+  const [showAddTask, setShowAddTask] = useState(false)
+
+      const [tasks, setTasks] = useState([
+      {
+        id: 1,
+        text: "Doctors Appointment",
+        day: "Feb 5th at 2:30pm",
+        reminder: false
+    },
+    {
+        id: 2,
+        text: "Food Appointment",
+        day: "Feb 5th at 4:30pm",
+        reminder: false,
+    },
+    {
+        text: "Take Test",
+        day: "Monday 5pm",
+        reminder: true,
+        id: 3,
+    },
+    ]);
+
+    const onDelete = (id) => {
+      setTasks(tasks.filter((task) => task.id !== id))
+    };
+
+    const toggleReminder = (id) => {
+
+      setTasks(
+        tasks.map((task) => (
+        task.id === id ?
+          { ...task, reminder: !task.reminder} : task
+        )
+        )
+      );
+    };
+
+    const onAdd= (task) => {
+      task.id = tasks.length + 1;
+      setTasks([...tasks, task]);
+    };
+
+    return (
+    <div className = "container">
+      <Header nShowAdd={() => setShowAddTask(!showAddTask)}/>
+      
+      <AddTask onAdd={onAdd}/>
+      <Tasks tasks={tasks} onDelete={onDelete} onToggle={toggleReminder} />
     </div>
-  );
-}
-
+    );
+};
 export default App;
